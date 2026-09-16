@@ -5,6 +5,7 @@ function onOpen() {
     .addItem('2. Create Assessment Form', 'createAssessmentForm')
     .addItem('3. Install Form Trigger', 'installFormTrigger')
     .addSeparator()
+    .addItem('Set Current Cycle...', 'setCurrentCycle')
     .addItem('Send Pending Student Emails', 'sendPendingStudentEmails')
     .addToUi();
 }

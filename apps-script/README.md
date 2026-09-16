@@ -19,7 +19,7 @@ FormTrigger.gs
         │                                        growth_area, student_message}
         │      writes one row to Results
         ▼
-Results tab (one row per Student ID × Week × Trait)
+Results tab (one row per Cycle × Student ID × Week × Trait)
         │
         ▼  ("Send Pending Student Emails" menu action, deliberate — not automatic)
 Email.gs → combines a student's un-emailed rows for that Week into one email
@@ -49,6 +49,11 @@ Email.gs → combines a student's un-emailed rows for that Week into one email
      Skip this and just link its response destination to this Sheet instead.
    - **3. Install Form Trigger** — wires `onFormSubmit` so every submission
      scores automatically from then on.
+   - **Set Current Cycle...** — enter a label like `Fall 2026`. Every
+     submission is stamped with whatever's set here until you change it, so
+     "Week 2" from this semester never collides with "Week 2" from a future
+     one in the Results tab. It's an admin setting, not a Form field — run
+     this once now, and again at the start of each future cycle.
 5. The first run of anything that calls an external service (Claude, Gmail)
    will prompt a Google OAuth consent screen — approve it once.
 
@@ -78,6 +83,11 @@ context to fix it, and never silently swallowed).
   automatically; nothing reaches a student's inbox until someone clicks
   "Send Pending Student Emails," so there's a natural review point on the
   Results tab in between.
-- **`Gap` column**: add a formula like `=IF(H2="","",F2-H2)` down that
-  column once — it's left blank by the script since `TeacherHandScore` is
+- **`Gap` column**: add a formula like `=IF(I2="","",G2-I2)` down that
+  column once (G = AI Score, I = TeacherHandScore, given Cycle now sits in
+  column B) — it's left blank by the script since `TeacherHandScore` is
   filled in by hand during PLC norming, not by the pipeline.
+- **`Cycle` is set once via the menu, not per submission.** It's admin
+  metadata (which semester/run this belongs to), not something a student
+  should have to select correctly on the Form — so it's read from a Script
+  Property at scoring time and stamped onto every row automatically.

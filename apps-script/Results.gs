@@ -9,6 +9,7 @@ function writeResultRow_(row) {
   var sheet = getSheet_(CONFIG.SHEET_RESULTS);
   sheet.appendRow([
     new Date(),          // Timestamp
+    row.cycle,            // Cycle - e.g. "Fall 2026", set once per cycle via the menu
     row.studentId,       // StudentID
     row.teacher,          // Teacher
     row.week,             // Week
@@ -16,7 +17,7 @@ function writeResultRow_(row) {
     row.score,            // AI Score
     row.rationale,        // AI Rationale
     '',                   // TeacherHandScore (filled in by hand during norming)
-    '',                   // Gap (add a =F2-H2 style formula down this column once)
+    '',                   // Gap (add a =IF(I2="","",G2-I2) style formula down this column once)
     row.strength,          // Strength
     row.growthArea,        // GrowthArea
     row.studentMessage,    // StudentMessage

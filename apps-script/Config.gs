@@ -12,13 +12,18 @@ var CONFIG = {
   CLAUDE_EFFORT: 'medium', // low | medium | high | xhigh | max
   CLAUDE_API_URL: 'https://api.anthropic.com/v1/messages',
   CLAUDE_API_VERSION: '2023-06-01',
-  MAX_RETRIES: 3
+  MAX_RETRIES: 3,
+
+  // Script Property key holding the active cycle label (e.g. "Fall 2026").
+  // Set via the menu ("Set Current Cycle...") - not a Form field, since it's
+  // an admin setting, not something a student should have to pick correctly.
+  CYCLE_PROPERTY_KEY: 'CURRENT_CYCLE'
 };
 
 var ROSTER_HEADERS = ['StudentID', 'Name', 'Email', 'Teacher'];
 var RUBRIC_HEADERS = ['Trait', 'RubricSource', 'MaxScore'];
 var RESULTS_HEADERS = [
-  'Timestamp', 'StudentID', 'Teacher', 'Week', 'Trait',
+  'Timestamp', 'Cycle', 'StudentID', 'Teacher', 'Week', 'Trait',
   'AI Score', 'AI Rationale', 'TeacherHandScore', 'Gap',
   'Strength', 'GrowthArea', 'StudentMessage', 'Emailed'
 ];

@@ -80,3 +80,31 @@ function installFormTrigger() {
   ScriptApp.newTrigger('onFormSubmit').forSpreadsheet(ss).onFormSubmit().create();
   SpreadsheetApp.getUi().alert('Form-submit trigger installed - new submissions will now score automatically.');
 }
+
+/**
+ * Cycle is an admin label ("Fall 2026", "Spring 2027 - Unit 2"), not a Form
+ * field - students never pick it, so it can't be picked wrong. Set it once
+ * at the start of each new cycle; every submission until the next change
+ * gets stamped with whatever's set here.
+ */
+function setCurrentCycle() {
+  var ui = SpreadsheetApp.getUi();
+  var current = PropertiesService.getScriptProperties().getProperty(CONFIG.CYCLE_PROPERTY_KEY) || '(not set)';
+  var resp = ui.prompt(
+    'Set Current Cycle',
+    'Current value: ' + current + '\n\nEnter the label to stamp on new submissions from now on (e.g. "Fall 2026"):',
+    ui.ButtonSet.OK_CANCEL
+  );
+  if (resp.getSelectedButton() !== ui.Button.OK) return;
+  var value = resp.getResponseText().trim();
+  if (!value) {
+    ui.alert('No value entered - Current Cycle left unchanged.');
+    return;
+  }
+  PropertiesService.getScriptProperties().setProperty(CONFIG.CYCLE_PROPERTY_KEY, value);
+  ui.alert('Current Cycle set to: ' + value);
+}
+
+function getCurrentCycle_() {
+  return PropertiesService.getScriptProperties().getProperty(CONFIG.CYCLE_PROPERTY_KEY) || '';
+}

@@ -17,6 +17,11 @@ function onFormSubmit(e) {
     var week = answers['Week'];
     var responseText = answers['Response'];
     var traits = normalizeTraits_(answers['Trait(s)']);
+    var cycle = getCurrentCycle_();
+
+    if (!cycle) {
+      logError_('onFormSubmit', 'CURRENT_CYCLE is not set - scoring this submission with a blank Cycle. Run "Set Current Cycle..." from the menu.');
+    }
 
     if (!studentId) {
       logError_('onFormSubmit', 'Submission had no Student ID.');
@@ -30,14 +35,14 @@ function onFormSubmit(e) {
     }
 
     traits.forEach(function (trait) {
-      scoreOneTrait_(studentId, student.teacher, week, trait, responseText);
+      scoreOneTrait_(cycle, studentId, student.teacher, week, trait, responseText);
     });
   } catch (err) {
     logError_('onFormSubmit (outer)', err.message || err);
   }
 }
 
-function scoreOneTrait_(studentId, teacher, week, trait, responseText) {
+function scoreOneTrait_(cycle, studentId, teacher, week, trait, responseText) {
   try {
     var rubric = getRubricForTrait(trait);
     var result = callClaudeForScoring(rubric.text, trait, responseText);
@@ -50,6 +55,7 @@ function scoreOneTrait_(studentId, teacher, week, trait, responseText) {
     }
 
     writeResultRow_({
+      cycle: cycle,
       studentId: studentId,
       teacher: teacher,
       week: week,
