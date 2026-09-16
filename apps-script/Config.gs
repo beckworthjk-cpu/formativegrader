@@ -20,7 +20,11 @@ var CONFIG = {
   CYCLE_PROPERTY_KEY: 'CURRENT_CYCLE'
 };
 
-var ROSTER_HEADERS = ['StudentID', 'Name', 'Email', 'Teacher'];
+// GradingMode: 'AI' (default - blank also means AI) or 'Hand'. Set per
+// student row (usually the same value for every row under one teacher).
+// 'Hand' means the Claude call is skipped entirely for that student - see
+// FormTrigger.gs.
+var ROSTER_HEADERS = ['StudentID', 'Name', 'Email', 'Teacher', 'GradingMode'];
 var RUBRIC_HEADERS = ['Trait', 'RubricSource', 'MaxScore'];
 var RESULTS_HEADERS = [
   'Timestamp', 'Cycle', 'StudentID', 'Teacher', 'Week', 'Trait',

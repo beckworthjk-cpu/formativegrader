@@ -15,7 +15,11 @@ function lookupStudent(studentId) {
         studentId: data[i][col['StudentID']],
         name: data[i][col['Name']],
         email: data[i][col['Email']],
-        teacher: data[i][col['Teacher']]
+        teacher: data[i][col['Teacher']],
+        // col['GradingMode'] is undefined on a Roster tab that predates this
+        // column - data[i][undefined] is just undefined, not an error, so
+        // this still works and falls back to '' (treated as AI mode).
+        gradingMode: data[i][col['GradingMode']] || ''
       };
     }
   }

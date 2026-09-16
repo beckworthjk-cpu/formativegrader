@@ -13,6 +13,10 @@ function sendPendingStudentEmails() {
   var groups = {}; // "cycle::studentId::week" -> [row indexes into `data`]
   for (var i = 1; i < data.length; i++) {
     if (data[i][col['Emailed']] === 'Y') continue;
+    // Hand-graded rows have no AI-written StudentMessage - nothing to send,
+    // and they're left un-flagged as Emailed (not 'Y', since nothing was
+    // actually sent) rather than sending a blank line for that trait.
+    if (!String(data[i][col['StudentMessage']] || '').trim()) continue;
     var key = data[i][col['Cycle']] + '::' + data[i][col['StudentID']] + '::' + data[i][col['Week']];
     (groups[key] = groups[key] || []).push(i);
   }

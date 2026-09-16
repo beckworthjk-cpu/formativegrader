@@ -40,12 +40,44 @@ function onFormSubmit(e) {
     // isn't set to collect verified emails.
     syncVerifiedEmail_(studentId, respondentEmail);
 
+    // Some teachers have opted their students out of AI grading entirely.
+    // This check happens before anything else in the loop - for a Hand
+    // student, callClaudeForScoring is never reached, so their writing
+    // never leaves this Sheet, let alone reaches the API.
+    var isHandGraded = String(student.gradingMode || '').trim().toLowerCase() === 'hand';
+
     traits.forEach(function (trait) {
-      scoreOneTrait_(cycle, studentId, student.teacher, week, trait, responseText);
+      if (isHandGraded) {
+        recordHandGradedSubmission_(cycle, studentId, student.teacher, week, trait);
+      } else {
+        scoreOneTrait_(cycle, studentId, student.teacher, week, trait, responseText);
+      }
     });
   } catch (err) {
     logError_('onFormSubmit (outer)', err.message || err);
   }
+}
+
+/**
+ * Logs that a submission came in for a Hand-mode student, without ever
+ * calling Claude. Same row shape as an AI-scored one so it lives in the
+ * same Results tab, but AI Score and everything Claude would have
+ * generated are left blank - TeacherHandScore is where the real grade
+ * goes, filled in by hand once the teacher scores it on paper.
+ */
+function recordHandGradedSubmission_(cycle, studentId, teacher, week, trait) {
+  writeResultRow_({
+    cycle: cycle,
+    studentId: studentId,
+    teacher: teacher,
+    week: week,
+    trait: trait,
+    score: '',
+    rationale: '(Hand-graded - not submitted to AI)',
+    strength: '',
+    growthArea: '',
+    studentMessage: ''
+  });
 }
 
 function scoreOneTrait_(cycle, studentId, teacher, week, trait, responseText) {
