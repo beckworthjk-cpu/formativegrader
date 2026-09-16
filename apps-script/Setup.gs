@@ -108,3 +108,41 @@ function setCurrentCycle() {
 function getCurrentCycle_() {
   return PropertiesService.getScriptProperties().getProperty(CONFIG.CYCLE_PROPERTY_KEY) || '';
 }
+
+/**
+ * Rewrites the live Form's "Trait(s)" checkbox choices to match whatever's
+ * currently in the Rubric Criteria tab. Run this any time a trait is added,
+ * renamed, or removed there - it replaces the whole choice list, it doesn't
+ * merge, so Rubric Criteria stays the single source of truth for what
+ * students can select. Works whether the Form was built by "Create
+ * Assessment Form" or linked in manually, since it looks up the Form
+ * through the Sheet's own response-destination link, not a stored ID.
+ */
+function syncFormTraitChoices() {
+  var ui = SpreadsheetApp.getUi();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var formUrl = ss.getFormUrl();
+
+  if (!formUrl) {
+    ui.alert('No Form is linked to this Sheet yet. Run "Create Assessment Form" first, or link an existing Form\'s response destination to this Sheet.');
+    return;
+  }
+
+  var traitItem = findTraitCheckboxItem_(FormApp.openByUrl(formUrl));
+  if (!traitItem) {
+    ui.alert('Could not find a checkbox question titled "Trait(s)" on the linked Form. Rename your trait question to exactly "Trait(s)" and try again.');
+    return;
+  }
+
+  var traitNames = traitNamesFromRubricTab_(ss);
+  traitItem.setChoiceValues(traitNames);
+  ui.alert('Form trait choices updated:\n\n' + traitNames.join('\n'));
+}
+
+function findTraitCheckboxItem_(form) {
+  var items = form.getItems(FormApp.ItemType.CHECKBOX);
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].getTitle().trim() === 'Trait(s)') return items[i].asCheckboxItem();
+  }
+  return null;
+}

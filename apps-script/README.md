@@ -64,6 +64,16 @@ Email.gs → combines a student's un-emailed rows for that Week into one email
 5. The first run of anything that calls an external service (Claude, Gmail)
    will prompt a Google OAuth consent screen — approve it once.
 
+## Adding a new trait later
+
+The Form does **not** stay in sync with the Rubric Criteria tab on its own
+after creation, so a new trait needs two steps: add its row to Rubric
+Criteria as usual, then run **Sync Trait Choices to Form** from the menu —
+it rewrites the live Form's "Trait(s)" checkbox list to match Rubric
+Criteria exactly. Don't re-run "Create Assessment Form" for this — that
+builds a second, separate Form with its own response destination rather
+than updating the existing one.
+
 ## Trying it
 
 Submit a test response through the Form with a Student ID that's in your
