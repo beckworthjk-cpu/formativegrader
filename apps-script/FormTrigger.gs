@@ -18,6 +18,7 @@ function onFormSubmit(e) {
     var responseText = answers['Response'];
     var traits = normalizeTraits_(answers['Trait(s)']);
     var cycle = getCurrentCycle_();
+    var respondentEmail = getRespondentEmail_(e);
 
     if (!cycle) {
       logError_('onFormSubmit', 'CURRENT_CYCLE is not set - scoring this submission with a blank Cycle. Run "Set Current Cycle..." from the menu.');
@@ -33,6 +34,11 @@ function onFormSubmit(e) {
       logError_('onFormSubmit', 'Unrecognized Student ID: "' + studentId + '" - check for a typo against the Roster tab.');
       return;
     }
+
+    // Fills Roster's Email if blank, or flags a mismatch - never sent to
+    // Claude, this stays entirely inside the Sheet. No-ops if the Form
+    // isn't set to collect verified emails.
+    syncVerifiedEmail_(studentId, respondentEmail);
 
     traits.forEach(function (trait) {
       scoreOneTrait_(cycle, studentId, student.teacher, week, trait, responseText);
@@ -84,4 +90,13 @@ function itemResponsesByTitle_(e) {
 function normalizeTraits_(raw) {
   if (Array.isArray(raw)) return raw.map(function (t) { return String(t).trim(); }).filter(String);
   return String(raw || '').split(',').map(function (t) { return t.trim(); }).filter(String);
+}
+
+/** Empty string (not an error) if the Form isn't set to collect verified emails. */
+function getRespondentEmail_(e) {
+  try {
+    return (e.response.getRespondentEmail() || '').trim();
+  } catch (err) {
+    return '';
+  }
 }

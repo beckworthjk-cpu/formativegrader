@@ -47,6 +47,13 @@ Email.gs → combines a student's un-emailed rows for that Week into one email
      ID, Week, Trait checkboxes pulled from your Rubric Criteria tab,
      Response) and points its responses at this Sheet. Already have a form?
      Skip this and just link its response destination to this Sheet instead.
+   - **Manual step, once, on the Form itself**: Settings → Responses →
+     "Collect email addresses" → **Verified**. Requires the Form already be
+     restricted to your school's accounts (worth doing anyway, to keep
+     outside submissions off it). This is what lets `syncVerifiedEmail_`
+     auto-fill Roster's Email column and flag ID/email mismatches — not
+     required for the pipeline to work, but skip it and that piece silently
+     no-ops.
    - **3. Install Form Trigger** — wires `onFormSubmit` so every submission
      scores automatically from then on.
    - **Set Current Cycle...** — enter a label like `Fall 2026`. Every
@@ -91,3 +98,10 @@ context to fix it, and never silently swallowed).
   metadata (which semester/run this belongs to), not something a student
   should have to select correctly on the Form — so it's read from a Script
   Property at scoring time and stamped onto every row automatically.
+- **Verified email sync never touches what's sent to Claude.** The Form's
+  verified-email capture and `syncVerifiedEmail_` (Roster.gs) only ever
+  read/write the Roster tab — the API call in `ClaudeClient.gs` still sends
+  exactly `{rubric text, trait, response text}`, unchanged by this feature.
+  It's used only to auto-fill a blank Email cell or flag a mismatch against
+  what's on file (logged to Errors, not blocked) — never as a replacement
+  for Student ID as the actual lookup key.
