@@ -7,7 +7,7 @@
  * scoring is never left to hoping the model formats its reply consistently.
  */
 
-function callClaudeForScoring(rubricText, trait, responseText) {
+function callClaudeForScoring(rubricText, trait, responseText, passageText) {
   var apiKey = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
   if (!apiKey) {
     throw new Error('ANTHROPIC_API_KEY is not set. Project Settings > Script Properties.');
@@ -16,13 +16,13 @@ function callClaudeForScoring(rubricText, trait, responseText) {
   var payload = {
     model: CONFIG.CLAUDE_MODEL,
     max_tokens: CONFIG.CLAUDE_MAX_TOKENS,
-    system: buildSystemPrompt_(rubricText, trait),
+    system: buildSystemPrompt_(rubricText, trait, !!passageText),
     output_config: {
       effort: CONFIG.CLAUDE_EFFORT,
       format: { type: 'json_schema', schema: buildScoringSchema_() }
     },
     messages: [
-      { role: 'user', content: 'Student response to score:\n\n' + responseText }
+      { role: 'user', content: buildUserMessage_(responseText, passageText) }
     ]
   };
 
@@ -71,8 +71,8 @@ function callClaudeForScoring(rubricText, trait, responseText) {
   throw new Error('Claude API failed after ' + CONFIG.MAX_RETRIES + ' attempts. Last error: ' + lastError);
 }
 
-function buildSystemPrompt_(rubricText, trait) {
-  return [
+function buildSystemPrompt_(rubricText, trait, hasPassage) {
+  var lines = [
     'You are scoring one high-school student\'s short written response against a single',
     'trait from a department-wide writing rubric. Score strictly against the rubric below -',
     'do not substitute your own general sense of writing quality.',
@@ -81,7 +81,20 @@ function buildSystemPrompt_(rubricText, trait) {
     '',
     'Rubric for this trait (use these exact score levels):',
     rubricText,
-    '',
+    ''
+  ];
+
+  if (hasPassage) {
+    lines.push(
+      'The user message includes the source passage the student is analyzing, followed by',
+      'their response. Check the student\'s claims (quoted words, devices, evidence) against',
+      'the actual passage text - do not take an inaccurate or fabricated citation at face',
+      'value just because it sounds plausible or is phrased confidently.',
+      ''
+    );
+  }
+
+  lines.push(
     'Output requirements:',
     '- "rationale_for_teacher" should quote or closely paraphrase specific words from the',
     '  student\'s response to justify the score.',
@@ -89,7 +102,19 @@ function buildSystemPrompt_(rubricText, trait) {
     '  general impression.',
     '- "student_message" is written directly to the student: encouraging, specific, 2-3',
     '  sentences, plain language, no score number or rubric jargon.'
-  ].join('\n');
+  );
+
+  return lines.join('\n');
+}
+
+function buildUserMessage_(responseText, passageText) {
+  if (!passageText) {
+    return 'Student response to score:\n\n' + responseText;
+  }
+  return (
+    'Source passage the student is analyzing:\n"""\n' + passageText + '\n"""\n\n' +
+    'Student response to score:\n\n' + responseText
+  );
 }
 
 function buildScoringSchema_() {

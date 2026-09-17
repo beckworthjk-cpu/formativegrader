@@ -4,6 +4,7 @@
 var CONFIG = {
   SHEET_ROSTER: 'Roster',
   SHEET_RUBRICS: 'Rubric Criteria',
+  SHEET_PASSAGES: 'Passages',
   SHEET_RESULTS: 'Results',
   SHEET_ERRORS: 'Errors',
 
@@ -26,6 +27,10 @@ var CONFIG = {
 // FormTrigger.gs.
 var ROSTER_HEADERS = ['StudentID', 'Name', 'Email', 'Teacher', 'GradingMode'];
 var RUBRIC_HEADERS = ['Trait', 'RubricSource', 'MaxScore'];
+// One row per Cycle + Week that has an assigned passage. SourceText can be
+// pasted text or a Google Doc URL, same pattern as RubricSource. A Week
+// with no row here just means that formative doesn't analyze a passage.
+var PASSAGE_HEADERS = ['Cycle', 'Week', 'SourceText'];
 var RESULTS_HEADERS = [
   'Timestamp', 'Cycle', 'StudentID', 'Teacher', 'Week', 'Trait',
   'AI Score', 'AI Rationale', 'TeacherHandScore', 'Gap',

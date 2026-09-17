@@ -41,3 +41,21 @@ function logError_(context, message) {
     console.error(context + ': ' + message);
   }
 }
+
+/**
+ * Shared by Rubric Criteria and Passages: a cell can hold pasted text
+ * directly, or a Google Doc URL to pull the full text from - same pattern
+ * either way, so both lookups resolve through this one function.
+ */
+function resolveTextSource_(source) {
+  if (source.indexOf('docs.google.com') !== -1) {
+    return DocumentApp.openById(extractDocId_(source)).getBody().getText();
+  }
+  return source;
+}
+
+function extractDocId_(url) {
+  var match = url.match(/[-\w]{25,}/);
+  if (!match) throw new Error('Could not find a Google Doc ID in URL: ' + url);
+  return match[0];
+}

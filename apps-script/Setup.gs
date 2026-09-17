@@ -8,13 +8,15 @@ function setupSheets() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   ensureSheet_(ss, CONFIG.SHEET_ROSTER, ROSTER_HEADERS);
   ensureSheet_(ss, CONFIG.SHEET_RUBRICS, RUBRIC_HEADERS);
+  ensureSheet_(ss, CONFIG.SHEET_PASSAGES, PASSAGE_HEADERS);
   ensureSheet_(ss, CONFIG.SHEET_RESULTS, RESULTS_HEADERS);
   ensureSheet_(ss, CONFIG.SHEET_ERRORS, ERROR_HEADERS);
   protectRosterSheet_(ss);
   SpreadsheetApp.getUi().alert(
     'Tabs are set up.\n\n' +
-    'Next: fill in the Roster and Rubric Criteria tabs, then run ' +
-    '"Create Assessment Form" (or link an existing Form\'s destination to this sheet).'
+    'Next: fill in the Roster and Rubric Criteria tabs (and Passages, for any ' +
+    'week that analyzes a specific text), then run "Create Assessment Form" ' +
+    '(or link an existing Form\'s destination to this sheet).'
   );
 }
 

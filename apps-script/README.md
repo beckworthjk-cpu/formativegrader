@@ -36,16 +36,20 @@ Email.gs → combines a student's un-emailed rows for that Week into one email
    `ANTHROPIC_API_KEY` = your key. Never paste the key directly into the
    code — that's the whole point of Script Properties.
 4. Reload the Sheet. A **Formative Grader** menu appears. Run, in order:
-   - **1. Setup Sheets** — creates Roster, Rubric Criteria, Results, and
-     Errors tabs with headers, and locks the Roster tab to just you (it's
-     the only place Student ID and name/email sit next to each other).
+   - **1. Setup Sheets** — creates Roster, Rubric Criteria, Passages,
+     Results, and Errors tabs with headers, and locks the Roster tab to just
+     you (it's the only place Student ID and name/email sit next to each
+     other).
    - Fill in **Roster** (StudentID, Name, Email, Teacher, GradingMode) and
      **Rubric Criteria** (Trait, RubricSource, MaxScore) by hand.
      `RubricSource` can be the full rubric pasted as text, or a Google Doc
      URL — whatever a teacher already uses for hand-scoring works
      unmodified. Leave `GradingMode` blank for normal AI scoring; set it to
      `Hand` for any teacher whose students should never be sent to Claude at
-     all (see "Hand-grading opt-out" below).
+     all (see "Hand-grading opt-out" below). Fill in **Passages** (Cycle,
+     Week, SourceText) only for weeks where students are analyzing a
+     specific text (see "Passage-based formatives" below) — leave a week out
+     entirely if it doesn't need one.
    - **2. Create Assessment Form** — builds the student-facing Form (Student
      ID, Week, Trait checkboxes pulled from your Rubric Criteria tab,
      Response) and points its responses at this Sheet. Already have a form?
@@ -76,6 +80,27 @@ it rewrites the live Form's "Trait(s)" checkbox list to match Rubric
 Criteria exactly. Don't re-run "Create Assessment Form" for this — that
 builds a second, separate Form with its own response destination rather
 than updating the existing one.
+
+## Passage-based formatives
+
+A rubric alone isn't enough for a task like "identify the tone of this
+passage" — Claude also needs the actual passage, or it's only judging
+whether the analysis *sounds* plausible, not whether it's *true* of the
+text. Add a row to the **Passages** tab (Cycle, Week, SourceText — pasted
+text or a Google Doc URL, same pattern as RubricSource) for any week that
+analyzes a specific text; `getPassageText` looks it up by Cycle + Week and
+`ClaudeClient.gs` includes it in the grading call, clearly separated from
+the student's own response so Claude doesn't confuse the two, with an
+explicit instruction to check the student's cited evidence against what's
+actually in the passage rather than taking a confident-sounding citation
+at face value.
+
+One tradeoff worth knowing: the passage is looked up once per submission,
+not per trait, so if a week scores multiple traits and only one of them
+is passage-based, every trait scored that week gets the passage included
+in its context — harmless for a trait that doesn't need it, just a bit of
+extra (unused) token spend. A week with no Passages row simply skips this
+entirely, so CER weeks that don't need a specific text are unaffected.
 
 ## Hand-grading opt-out
 

@@ -46,11 +46,16 @@ function onFormSubmit(e) {
     // never leaves this Sheet, let alone reaches the API.
     var isHandGraded = String(student.gradingMode || '').trim().toLowerCase() === 'hand';
 
+    // Same passage applies to every trait scored this week - one lookup
+    // per submission, not per trait. Empty string if this week has no
+    // passage-based formative (most CER weeks won't).
+    var passageText = isHandGraded ? '' : getPassageText(cycle, week);
+
     traits.forEach(function (trait) {
       if (isHandGraded) {
         recordHandGradedSubmission_(cycle, studentId, student.teacher, week, trait);
       } else {
-        scoreOneTrait_(cycle, studentId, student.teacher, week, trait, responseText);
+        scoreOneTrait_(cycle, studentId, student.teacher, week, trait, responseText, passageText);
       }
     });
   } catch (err) {
@@ -80,10 +85,10 @@ function recordHandGradedSubmission_(cycle, studentId, teacher, week, trait) {
   });
 }
 
-function scoreOneTrait_(cycle, studentId, teacher, week, trait, responseText) {
+function scoreOneTrait_(cycle, studentId, teacher, week, trait, responseText, passageText) {
   try {
     var rubric = getRubricForTrait(trait);
-    var result = callClaudeForScoring(rubric.text, trait, responseText);
+    var result = callClaudeForScoring(rubric.text, trait, responseText, passageText);
 
     if (rubric.maxScore && (result.score < 1 || result.score > rubric.maxScore)) {
       logError_(

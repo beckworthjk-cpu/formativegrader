@@ -15,23 +15,10 @@ function getRubricForTrait(trait) {
       var source = String(data[i][col['RubricSource']]).trim();
       var maxScoreRaw = data[i][col['MaxScore']];
       return {
-        text: resolveRubricSource_(source),
+        text: resolveTextSource_(source),
         maxScore: maxScoreRaw ? Number(maxScoreRaw) : null
       };
     }
   }
   throw new Error('No rubric found for trait "' + trait + '" in the "' + CONFIG.SHEET_RUBRICS + '" tab.');
-}
-
-function resolveRubricSource_(source) {
-  if (source.indexOf('docs.google.com') !== -1) {
-    return DocumentApp.openById(extractDocId_(source)).getBody().getText();
-  }
-  return source;
-}
-
-function extractDocId_(url) {
-  var match = url.match(/[-\w]{25,}/);
-  if (!match) throw new Error('Could not find a Google Doc ID in URL: ' + url);
-  return match[0];
 }
