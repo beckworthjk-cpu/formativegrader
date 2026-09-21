@@ -47,11 +47,19 @@ function compileOneSubmission_(studentId, rubricName, notes) {
   }
 }
 
-/** Collapses a form response event into { "Item Title": answer }. */
+/**
+ * Collapses a form-submit event into { "Item Title": answer }. This trigger
+ * is installed on the SPREADSHEET (installFormTrigger, in Setup.gs), and
+ * that flavor of onFormSubmit event carries `namedValues` (a plain
+ * { title: [answer, ...] } map) - not `response` (a FormResponse object),
+ * which only installable triggers created directly on the Form itself get.
+ */
 function itemResponsesByTitle_(e) {
+  var named = e.namedValues || {};
   var answers = {};
-  e.response.getItemResponses().forEach(function (r) {
-    answers[r.getItem().getTitle()] = r.getResponse();
+  Object.keys(named).forEach(function (title) {
+    var values = named[title];
+    answers[title] = Array.isArray(values) ? values[0] : values;
   });
   return answers;
 }
