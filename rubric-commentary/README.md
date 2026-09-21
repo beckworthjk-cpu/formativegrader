@@ -45,9 +45,11 @@ numbers on your paper rubric
    type into Notes to reference it) and `RubricSource` (paste the rubric
    text, or paste a Google Doc URL — same rubric you already use for
    hand-scoring works unmodified).
-6. Optionally fill in **Roster** (`StudentID`, `Name`) — this only makes the
-   Commentary tab show a name next to each ID so it's easier to match rows
-   back to papers. Skip it entirely if you'd rather work off numbers only.
+6. Optionally fill in **Roster** (`StudentID`, `Name`, `Email`) — Name just
+   makes the Commentary tab easier to read; Email is only needed for
+   students you actually want feedback emailed to (see step 8 below). Skip
+   either column, or the whole tab, for students you'll hand papers back to
+   in person instead.
 
 ## Using it
 
@@ -79,6 +81,15 @@ numbers on your paper rubric
 6. Read the Commentary tab (or print it) alongside your stack of papers and
    a printed rubric — circle the scores yourself, use Claude's write-up as
    the comments you'd otherwise have written in the margins.
+7. Type each score into that row's **Score** column — whatever you'd write
+   on the paper ("8/10", "17/20", "B+"), exactly as-is, no interpretation.
+   A row with no Score yet is treated as not ready, so nothing sends early.
+8. When you're ready, run **Send Pending Student Emails**. It emails each
+   student their Score, Strengths, and AreasForGrowth in one message, using
+   the email on file for their Student ID in **Roster** — add `Email` there
+   for anyone you want emailed (leave it blank for students you're handing
+   the paper back to in person instead). Sent rows are marked
+   `Emailed = Y` so re-running the menu action never double-sends.
 
 ## What Claude is and isn't asked to do
 

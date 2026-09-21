@@ -12,10 +12,13 @@ function setupSheets() {
   SpreadsheetApp.getUi().alert(
     'Tabs are set up.\n\n' +
     'Next: add a row to Rubric for each assignment (RubricName + pasted text ' +
-    'or a Google Doc URL). Roster is optional - fill it in if you want names ' +
-    'next to Student IDs in the Commentary tab.\n\n' +
+    'or a Google Doc URL). Roster is optional - fill in Name/Email if you ' +
+    'want names in the Commentary tab and want to email feedback out.\n\n' +
     'Then: dictate notes into a Google Doc (one doc per batch of papers), ' +
     'add a row to Notes with that batch\'s RubricName and the doc\'s URL (or ' +
-    'pasted text), and run "Compile Pending Notes".'
+    'pasted text), and run "Compile Pending Notes".\n\n' +
+    'Once you\'ve read a student\'s Commentary row and circled their score on ' +
+    'the printed rubric, type it into that row\'s Score column, then run ' +
+    '"Send Pending Student Emails" when you\'re ready to send.'
   );
 }

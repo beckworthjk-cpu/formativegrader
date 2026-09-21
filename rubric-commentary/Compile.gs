@@ -115,6 +115,8 @@ function appendCommentaryRow_(rubricName, studentId, result) {
     studentId,
     getStudentName_(studentId),
     result.strengths,
-    result.areas_for_growth
+    result.areas_for_growth,
+    '', // Score - filled in by hand once you've circled it on the printed rubric
+    ''  // Emailed - set to 'Y' by Send Pending Student Emails
   ]);
 }
