@@ -18,3 +18,16 @@ function getRubricByName_(rubricName) {
   }
   throw new Error('No rubric found named "' + target + '" in the "' + CONFIG.SHEET_RUBRICS + '" tab.');
 }
+
+/** Choice list for the Form's "Rubric" dropdown - kept in sync via the menu. */
+function rubricNamesFromTab_(ss) {
+  var sheet = ss.getSheetByName(CONFIG.SHEET_RUBRICS);
+  var fallback = ['(add a row to the Rubric tab first)'];
+  if (!sheet || sheet.getLastRow() < 2) return fallback;
+  var col = headerMap_(sheet);
+  var names = sheet.getRange(2, col['RubricName'] + 1, sheet.getLastRow() - 1, 1)
+    .getValues()
+    .map(function (r) { return String(r[0]).trim(); })
+    .filter(String);
+  return names.length ? names : fallback;
+}

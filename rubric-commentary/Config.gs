@@ -7,7 +7,6 @@
 var CONFIG = {
   SHEET_ROSTER: 'Roster',
   SHEET_RUBRICS: 'Rubric',
-  SHEET_NOTES: 'Notes',
   SHEET_COMMENTARY: 'Commentary',
   SHEET_ERRORS: 'Errors',
 
@@ -28,12 +27,6 @@ var ROSTER_HEADERS = ['StudentID', 'Name', 'Email'];
 // RubricSource can be pasted rubric text or a Google Doc URL - same
 // paste-it-or-link-it pattern as the other project in this repo.
 var RUBRIC_HEADERS = ['RubricName', 'RubricSource'];
-
-// One row per dictation batch (usually: one stack of papers for one
-// assignment). NotesText can be pasted text or a Google Doc URL. Compiled
-// is set to TRUE once this row has been processed, so re-running "Compile
-// Pending Notes" never double-compiles the same batch.
-var NOTES_HEADERS = ['Timestamp', 'RubricName', 'NotesText', 'Compiled'];
 
 // Score is left blank by the script - fill it in by hand once you've circled
 // it on your printed rubric. Whatever you type goes into the email as-is
