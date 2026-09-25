@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!--
+  BEFORE PUBLISHING — quick customization checklist:
+  1. Search this file for [CLASS NAME] and replace with your class/subject name.
+  2. Search for [CURRENCY NAME] and replace with whatever you call the points
+     (e.g. "Points", "Bucks", "Coins", "Tickets"). Capitalization is already
+     handled — just do a find-and-replace on the word itself.
+  3. Search for [TEACHER NAME] and [TEACHER EMAIL] and fill in your info.
+  4. Search for [UPDATE FREQUENCY] and set it to how often you actually
+     process redemptions/update balances (e.g. "once a day, after school"
+     or "every Friday").
+  5. The two buttons below already point at your live Google Forms. If you
+     ever regenerate a form, just swap the href in the two <a class="btn">
+     tags near "REDEMPTION FORM LINK" and "BALANCE FORM LINK".
+  Everything else on the page is ready to go as-is.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[CLASS NAME] Student Forms</title>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --card-bg: #ffffff;
+    --text: #1f2430;
+    --muted: #5b6270;
+    --border: #e2e5ec;
+    --accent: #2b6cb0;
+    --accent-dark: #1e4e80;
+    --accent-2: #2f855a;
+    --accent-2-dark: #22623f;
+    --note-bg: #fff8e6;
+    --note-border: #f0c674;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161c;
+      --card-bg: #1d2029;
+      --text: #edeef2;
+      --muted: #a3a9b7;
+      --border: #2c303c;
+      --accent: #5b9bd9;
+      --accent-dark: #79b0e6;
+      --accent-2: #52b788;
+      --accent-2-dark: #6fcf9d;
+      --note-bg: #2a2410;
+      --note-border: #665215;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 16px 64px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  header h1 {
+    font-size: 1.6rem;
+    margin: 0 0 6px;
+  }
+  header p.subtitle {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.98rem;
+  }
+  section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  h2 {
+    font-size: 1.15rem;
+    margin: 0 0 10px;
+  }
+  h2 .icon {
+    margin-right: 6px;
+  }
+  p { margin: 0 0 12px; }
+  p:last-child { margin-bottom: 0; }
+  ul { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  li:last-child { margin-bottom: 0; }
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 560px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+  .form-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 18px;
+    text-align: center;
+  }
+  .form-card h3 {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+  }
+  .form-card p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 16px;
+  }
+  .btn {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  .btn-redeem { background: var(--accent); }
+  .btn-redeem:hover { background: var(--accent-dark); }
+  .btn-balance { background: var(--accent-2); }
+  .btn-balance:hover { background: var(--accent-2-dark); }
+  .note {
+    background: var(--note-bg);
+    border: 1px solid var(--note-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  .note strong { display: block; margin-bottom: 4px; }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 24px;
+  }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>[CLASS NAME] Student Forms</h1>
+    <p class="subtitle">Everything you need to spend and check your [CURRENCY NAME] in one place.</p>
+  </header>
+
+  <section>
+    <h2><span class="icon">📋</span>What are these forms for?</h2>
+    <p>
+      Our classroom runs on <strong>[CURRENCY NAME]</strong> — you earn them for the
+      things we've talked about in class, and you can trade them in for rewards
+      using the forms below.
+    </p>
+    <ul>
+      <li><strong>Redemption Form</strong> — use this when you want to spend
+        [CURRENCY NAME] you've earned on a reward or privilege.</li>
+      <li><strong>Balance Check Form</strong> — use this to ask how many
+        [CURRENCY NAME] you currently have.</li>
+    </ul>
+  </section>
+
+  <div class="cards">
+    <div class="form-card">
+      <h3>💰 Redemption Form</h3>
+      <p>Spend your [CURRENCY NAME] on a reward.</p>
+      <!-- REDEMPTION FORM LINK -->
+      <a class="btn btn-redeem" href="https://docs.google.com/forms/u/0/d/e/1FAIpQLSccZ49dYZQWSAc2JaEOSxtnChJGMVUkd4Eg1M83_29kOCEJ9w/viewform" target="_blank" rel="noopener">Open Redemption Form</a>
+    </div>
+    <div class="form-card">
+      <h3>🔍 Balance Check Form</h3>
+      <p>Ask what your current balance is.</p>
+      <!-- BALANCE FORM LINK -->
+      <a class="btn btn-balance" href="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfgRpI5XBZNr6qtXGeEkvBQfF7StPvxR_8iv6aEOJFc8augxQ/viewform" target="_blank" rel="noopener">Open Balance Check Form</a>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="icon">⏱️</span>How balances get updated</h2>
+    <p>
+      Nothing on these forms updates instantly. When you submit either form,
+      it goes into a queue that [TEACHER NAME] reviews and processes
+      <strong>[UPDATE FREQUENCY]</strong> — not the moment you hit submit.
+    </p>
+    <div class="note">
+      <strong>You do not need to check your balance multiple times a day.</strong>
+      Submitting the Balance Check Form again and again doesn't make the answer
+      come back any faster — it just adds more requests for [TEACHER NAME] to
+      go through, which actually slows things down for everyone, including you.
+      One check is enough. If you haven't heard back by the next update, it's
+      still in the queue — please be patient rather than resubmitting.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="icon">✅</span>Tips for using the forms correctly</h2>
+    <ul>
+      <li>Use your real name and correct student ID exactly as it appears on
+        your roster — mismatched info is the #1 reason a request gets delayed.</li>
+      <li>Submit <strong>one</strong> request per form per thing you're asking
+        about. Duplicate submissions don't get processed faster; they just
+        create confusion about which one is "the real one."</li>
+      <li>Double-check your answers before you hit submit — you won't get a
+        confirmation email back right away.</li>
+      <li>Redemption requests are reviewed before they're fulfilled, so
+        submitting the form is a <em>request</em>, not an instant purchase.</li>
+      <li>If something looks wrong (a redemption didn't go through, your
+        balance seems off), don't just resubmit the form — email
+        [TEACHER NAME] directly at
+        <a href="mailto:[TEACHER EMAIL]">[TEACHER EMAIL]</a> so it can be
+        looked into.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Questions about [CURRENCY NAME] or these forms? Ask [TEACHER NAME] in
+    class or email <a href="mailto:[TEACHER EMAIL]">[TEACHER EMAIL]</a>.
+  </footer>
+
+</div>
+</body>
+</html>
