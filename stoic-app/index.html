@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c6a5e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Stoic">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:0}body{margin:0}[hidden]{display:none!important}</style>
+<title>Stoic Practices</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Work+Sans:wght@500;600&display=swap">
+<style>
+/* Layout: one narrow reading column, like a page of the Enchiridion; a bottom tab bar for thumb reach. */
+:root {
+  --stone: #e8ebe9;      /* cool limestone ground */
+  --slab: #f6f7f6;       /* raised surface */
+  --ink: #1d2524;
+  --ink-soft: #55615f;
+  --rule: #cdd3d1;
+  --verdigris: #2c6a5e;  /* oxidised bronze accent */
+  --bronze: #8a6631;     /* citations */
+  --verdigris-wash: #d6e4e0;
+  --font-display: "Marcellus", "Trajan Pro", Georgia, serif;
+  --font-body: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-ui: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --tabbar-h: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --stone: #111716; --slab: #19211f; --ink: #dfe6e3; --ink-soft: #94a39f;
+    --rule: #2c3836; --verdigris: #74b8a8; --bronze: #c9a266; --verdigris-wash: #1f3531;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --stone: #111716; --slab: #19211f; --ink: #dfe6e3; --ink-soft: #94a39f;
+  --rule: #2c3836; --verdigris: #74b8a8; --bronze: #c9a266; --verdigris-wash: #1f3531;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { background: var(--stone); }
+body {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--stone);
+}
+main {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px calc(var(--tabbar-h) + 32px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: 22px;
+}
+
+/* --- Headings & labels --- */
+.eyebrow {
+  font-family: var(--font-ui); font-weight: 600; font-size: 12px;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft);
+  margin: 0;
+}
+.view-head { display: flex; flex-direction: column; gap: 6px; }
+.view-title {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 30px; line-height: 1.15; margin: 0; letter-spacing: .01em;
+  text-wrap: balance;
+}
+.lede { margin: 0; color: var(--ink-soft); font-size: 16px; max-width: 34em; }
+
+/* --- Practice card: the one raised object on each view --- */
+.practice {
+  background: var(--slab);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 22px 20px 20px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.practice .cat { margin: 0; }
+.practice h2 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 24px; line-height: 1.22; margin: 0; text-wrap: balance;
+}
+.practice .body { margin: 0; }
+.source { margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.source + .source { padding-top: 12px; border-top: 1px dashed var(--rule); }
+.source q { font-style: italic; quotes: "\201C" "\201D"; }
+.source cite {
+  font-style: normal; font-family: var(--font-ui); font-weight: 500;
+  font-size: 13px; letter-spacing: .02em; color: var(--bronze);
+}
+.prompt {
+  margin: 0; padding: 12px 14px; border-radius: 4px;
+  background: var(--verdigris-wash); color: var(--ink); font-size: 16px;
+}
+.prompt b { font-family: var(--font-ui); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--verdigris); display: block; margin-bottom: 2px; }
+
+/* --- Maxim (quick-card line) --- */
+.maxim {
+  margin: 0; font-family: var(--font-display); font-size: 27px; line-height: 1.25;
+  color: var(--verdigris); text-wrap: balance;
+}
+.maxim-cite { margin: 6px 0 0; font-family: var(--font-ui); font-size: 13px; color: var(--bronze); }
+
+/* --- Buttons --- */
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button, .btn {
+  font-family: var(--font-ui); font-weight: 600; font-size: 15px;
+  border-radius: 999px; padding: 10px 18px; cursor: pointer;
+  border: 1px solid var(--verdigris); background: transparent; color: var(--verdigris);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px;
+}
+button.primary { background: var(--verdigris); color: var(--slab); }
+button.link {
+  border: 0; padding: 10px 0; min-height: 44px; border-radius: 0;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--verdigris); outline-offset: 2px;
+}
+.counter { font-family: var(--font-ui); font-size: 13px; color: var(--ink-soft); }
+
+/* --- Problem list --- */
+.group { display: flex; flex-direction: column; gap: 8px; }
+.group h3 { margin: 0; }
+.problem-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.problem-list li { border-bottom: 1px solid var(--rule); }
+.problem-list button {
+  width: 100%; border: 0; border-radius: 0; background: none; color: var(--ink);
+  font-family: var(--font-body); font-weight: 400; font-size: 17px;
+  padding: 13px 2px; justify-content: space-between; text-align: left;
+}
+.problem-list button::after { content: "\203A"; color: var(--verdigris); font-size: 22px; line-height: 1; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { font-size: 14px; padding: 8px 14px; min-height: 40px; }
+
+input[type="search"] {
+  width: 100%; font: inherit; font-size: 16px; color: var(--ink);
+  background: var(--slab); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 11px 14px;
+}
+
+/* --- Browse --- */
+details.section { border-top: 1px solid var(--rule); }
+details.section:last-of-type { border-bottom: 1px solid var(--rule); }
+details.section > summary {
+  list-style: none; cursor: pointer; padding: 14px 2px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+}
+details.section > summary::-webkit-details-marker { display: none; }
+details.section > summary .s-title { font-family: var(--font-display); font-size: 20px; }
+details.section > summary .s-count { font-family: var(--font-ui); font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.section-items { display: flex; flex-direction: column; gap: 14px; padding-bottom: 18px; }
+.rule-quote { margin: 0; padding: 16px 0; border-block: 1px solid var(--rule); }
+.rule-quote q { font-family: var(--font-display); font-size: 21px; line-height: 1.3; quotes: "\201C" "\201D"; }
+
+/* --- Tab bar --- */
+nav.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--slab); border-top: 1px solid var(--rule);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
+}
+nav.tabs ul { list-style: none; margin: 0 auto; padding: 0; max-width: 36rem; display: grid; grid-template-columns: repeat(5, 1fr); }
+nav.tabs a {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  height: var(--tabbar-h); text-decoration: none; color: var(--ink-soft);
+  font-family: var(--font-ui); font-weight: 500; font-size: 11.5px; letter-spacing: .02em;
+}
+nav.tabs a svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+nav.tabs a[aria-current="page"] { color: var(--verdigris); font-weight: 600; }
+
+.fade { animation: fade .25s ease-out; }
+@keyframes fade { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .fade { animation: none; } }
+</style>
+</head>
+<body>
+
+<main id="app" aria-live="polite"></main>
+
+<nav class="tabs" aria-label="Sections">
+  <ul>
+    <li><a href="#today" data-tab="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>Today</a></li>
+    <li><a href="#morning" data-tab="morning"><svg viewBox="0 0 24 24"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 5v3M5.6 9.6l1.8 1.4M18.4 9.6l-1.8 1.4"/></svg>Morning</a></li>
+    <li><a href="#evening" data-tab="evening"><svg viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5Z"/></svg>Evening</a></li>
+    <li><a href="#problems" data-tab="problems"><svg viewBox="0 0 24 24"><path d="M12 3 3 20h18L12 3Z"/><path d="M12 10v4M12 17v.5"/></svg>Problems</a></li>
+    <li><a href="#all" data-tab="all"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>All</a></li>
+  </ul>
+</nav>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Content (transcribed from the source document) ---------- */
+  var SECTIONS = [
+    { id: "m", name: "Morning: prepare before the day starts", short: "Morning", items: [
+      ["Get up for your work, not your comfort.", "When you don’t want to get out of bed, ask: “Was I made for this, to lie here warm?” Then name the work that is yours to do today and start it.", [["It is to go about a man’s work that I am stirred up.", "Med. V.1"]]],
+      ["Rehearse the difficult people you’ll meet.", "Before leaving the house, say plainly that you will deal with someone rude, ungrateful, or dishonest today. Remind yourself they act from ignorance, they are your kin by shared reason, and they cannot make you do anything shameful.", [["This day I shalt have to do with an idle curious man, with an unthankful man, a railer…", "Med. I.15"]]],
+      ["Preview each task’s likely snags.", "Before any activity, picture what usually goes wrong with it (traffic, interruptions, people being careless). Then state your real aim: “I’m going to do this <em>and</em> keep my composure.” When the snag comes, you’ve only lost the part you never controlled.", [["I will now go to bathe and keep my own will in harmony with nature.", "Ench. 4"]]],
+      ["Set your goals with a reserve clause.", "Plan fully, but hold every plan with an inner “if nothing prevents it.” A blocked plan then becomes a chance to practice patience, not a defeat.", [["It was with due exception, and reservation, that thou didst at first incline and desire.", "Med. VI.45"]]],
+      ["Look up before you look down.", "Take a moment outdoors to notice the sky and the order of things: the stars do their work steadily and without disguise. Use it as a model for the day.", [["No star or planet hath any cover before it.", "Med. XI.25"]]]
+    ]},
+    { id: "u", name: "In the moment: when something upsets you", short: "In the moment", items: [
+      ["Sort it first.", "Ask one question of anything that disturbs you: is this within my power or not? If not, tell yourself, “This is nothing to me,” and put your effort where you do have control.", [["If it concerns anything beyond our power, be prepared to say that it is nothing to you.", "Ench. 1"]]],
+      ["Talk back to the first impression.", "When something hits you, say to it: “You are only an impression, not the thing itself.” Then examine it before you accept it.", [["You are but a semblance and by no means the real thing.", "Ench. 1"]]],
+      ["Locate the hurt in your judgment, not the event.", "When you’re upset, look for the opinion underneath (“this is terrible,” “this is unfair”) and question it. Remove the opinion and the sense of injury goes with it.", [["Men are disturbed not by things, but by the views which they take of things.", "Ench. 5"], ["Remember that all is but opinion, and all opinion depends of the mind. Take thine opinion away…", "Med. XII.16"]]],
+      ["Buy time before you react.", "When provoked, don’t answer straight away. A pause is often enough to get control of yourself.", [["If you once gain time and respite, you will more easily command yourself.", "Ench. 20"]]],
+      ["Ask what strength the situation calls for.", "For every trouble, name the matching virtue you have for it: patience for insult, endurance for pain, self-control for temptation. Then use it.", [["If pain, then fortitude; if reviling, then patience.", "Ench. 10"]]],
+      ["Turn the obstacle into practice.", "If you’re blocked from doing one good thing, switch to a different virtue the block makes possible, such as patience or calm acceptance.", [["What in the one is thy hindrance, thou mayst make use of it for the exercise of another virtue.", "Med. VI.45"]]],
+      ["Want what actually happens.", "Stop demanding that events go your way. Practice wanting them to go the way they go.", [["Demand not that events should happen as you wish; but wish them to happen as they do happen, and you will go on well.", "Ench. 8"]]],
+      ["Deal with nuisances and move on.", "A bitter cucumber? Put it down. Brambles in the path? Step around them. Don’t add a speech about why the world contains such things.", [["Is the cucumber bitter? set it away. Brambles are in the way? avoid them. Let this suffice.", "Med. VIII.48"]]],
+      ["Separate the injury to the body from injury to you.", "Illness or pain blocks your body, not your will. Say so to yourself.", [["Sickness is an impediment to the body, but not to the will unless itself pleases.", "Ench. 9"]]],
+      ["Use Epicurus’s test for pain.", "Remind yourself that severe pain doesn’t last, and lasting pain can be borne.", [["Neither intolerable, nor eternal.", "Med. VII.35"]]],
+      ["Retreat inward for a minute.", "You don’t need a vacation to reset. Withdraw into your own mind, recall a few short principles, and come back refreshed.", [["At what time soever thou wilt, it is in thy power to retire into thyself.", "Med. IV.3"]]],
+      ["Stop being surprised by ordinary life.", "Expect the normal run of setbacks, rudeness, and loss; surprise turns them into crises.", [["How ridiculous and strange is he, that wonders at anything that happens in this life in the ordinary course of nature!", "Med. XII.10"]]]
+    ]},
+    { id: "p", name: "Other people: insult, anger, and difficult relationships", short: "Other people", items: [
+      ["Remember the offender thinks they’re right.", "When someone wrongs you or speaks badly of you, say: “It seemed right to him.” If they’re mistaken, they’re the one deceived and harmed.", [["You will meekly bear with a person who reviles you, for you will say upon every occasion, ‘It seemed so to him.’", "Ench. 42"]]],
+      ["Pick up the right handle.", "Every situation has a handle you can carry and one you can’t. With a family member who wrongs you, grab “he is my brother,” not “he wronged me.”", [["Everything has two handles: one by which it may be borne, another by which it cannot.", "Ench. 43"]]],
+      ["Answer criticism with humor, not defense.", "If you hear someone has spoken ill of you, don’t explain yourself. Say: “He didn’t know my other faults, or he’d have mentioned those too.”", [["", "Ench. 33"]]],
+      ["Don’t hand your mind to anyone who insults you.", "You’d be furious if someone gave your body away to a stranger. Don’t give your peace of mind away to every critic.", [["Do you feel no shame in delivering up your own mind to any reviler, to be disconcerted and confounded?", "Ench. 28"]]],
+      ["Describe, don’t judge.", "Say what someone did, not whether it was bad. “He drinks a lot,” not “he’s a drunk.” You rarely know their reasons.", [["Does anyone bathe hastily? Do not say that he does it ill, but hastily.", "Ench. 45"]]],
+      ["Take the best revenge.", "When someone behaves badly toward you, the response is not to become like them.", [["The best kind of revenge is, not to become like unto them.", "Med. VI.5"]]],
+      ["Expect bad behavior from people who behave badly.", "When someone ungrateful or dishonest disappoints you, ask why you expected anything else. The world will always contain such people; this one is simply one of them.", [["Desire not then that which is impossible. For this one… is one of those impudent ones, that the world cannot be without.", "Med. IX.43"]]],
+      ["Do good without waiting for thanks.", "Count the good deed itself as its full reward, and don’t keep a ledger of what you’re owed.", [["…from the action itself thou hadst received a full reward of the good that thou hadst done.", "Med. IX.43"]]],
+      ["Keep your side of a relationship, whatever they do.", "A bad father is still your father; an unjust brother is still your brother. Ask what your role requires of you, not what they deserve.", [["Consider not what he does, but what you are to do.", "Ench. 30"]]],
+      ["Stand firm like a headland.", "Let the waves of other people’s anger break against you without moving you, and let them quiet down around you.", [["Thou must be like a promontory of the sea, against which though the waves beat continually, yet it both itself stands.", "Med. IV.40"]]],
+      ["Comfort the grieving without grieving inwardly.", "Sit with a friend in pain, even sigh with them, but remember it’s their view of the event that hurts them, and don’t take that view on yourself.", [["If need be, to groan with him. Take heed, however, not to groan inwardly, too.", "Ench. 16"]]],
+      ["Don’t measure your worth against others’ wealth or talent.", "“I’m richer than you” proves only that your possessions are bigger, not that you are better. The same goes the other way.", [["But you, after all, consist neither in property nor in style.", "Ench. 44"]]]
+    ]},
+    { id: "d", name: "Desire, possessions, and loss", short: "Desire & loss", items: [
+      ["Name what you love for what it is.", "Start small: “This is a cup I’m fond of.” Then larger: when you hug someone you love, remember they are mortal. Loss will still hurt, but it won’t blindside you.", [["If you have a favorite cup, that it is but a cup of which you are fond of—for thus, if it is broken, you can bear it.", "Ench. 3"]]],
+      ["Say “returned,” not “lost.”", "When something or someone is taken from you, say it has been given back. While you have it, hold it like a traveler holds a room at an inn.", [["Never say of anything, ‘I have lost it,’ but, ‘I have restored it.’", "Ench. 11"]]],
+      ["Behave as at a banquet.", "When something good comes your way, take a modest share. If it passes you by, don’t grab for it. If it hasn’t reached you yet, wait.", [["Is anything brought round to you? Put out your hand and take a moderate share. Does it pass by you? Do not stop it.", "Ench. 15"]]],
+      ["Feel about your own losses as you would about a neighbor’s.", "When a neighbor’s cup breaks, you say “these things happen.” Apply the same words when it’s yours.", [["It should be always remembered how we are affected on hearing the same thing concerning others.", "Ench. 26"]]],
+      ["Practice on small losses first.", "When a little is spilled, broken, or taken, say: “This is the price of peace of mind. Nothing is free.”", [["This is the price paid for peace and tranquillity; and nothing is to be had for nothing.", "Ench. 12"]]],
+      ["Delay a tempting pleasure and picture both sides.", "When something pulls at you, wait. Picture the moment of enjoying it, then the moment of regretting it, then how good it will feel to have said no.", [["Let the affair wait your leisure, and procure yourself some delay.", "Ench. 34"]]],
+      ["Know the price of what you envy.", "If someone gets an invitation or recognition you didn’t, ask what they paid for it (flattery, attendance). You kept your coin; you didn’t lose.", [["For as he has the lettuces, so you have the obulus which you did not give.", "Ench. 25"]]],
+      ["Let your needs set the limit.", "Your body is the measure of what you need, as your foot is the measure of a shoe. Once you go past need, there’s no natural stopping point.", [["For to that which once exceeds the fit measure there is no bound.", "Ench. 39"]]],
+      ["See things stripped bare.", "When something seems impressive or desirable, describe it plainly to yourself. Fine wine is grape juice; a purple robe is sheep’s wool dyed with shellfish blood.", [["This purple robe, but sheep’s hairs, dyed with the blood of a shellfish.", "Med. VI.11"]]],
+      ["Treat loss as change.", "Remind yourself that nothing is destroyed, only changed, and change is how nature works.", [["Loss and corruption, is in very deed nothing else but change and alteration.", "Med. IX.33"]]]
+    ]},
+    { id: "z", name: "Perspective and mortality: zoom out", short: "Perspective", items: [
+      ["Keep death in view every day.", "Briefly bring to mind death and the other things people fear. Done regularly, it cuts petty thoughts and grasping wants down to size.", [["Let death and exile, and all other things which appear terrible, be daily before your eyes, but death chiefly; and you will never entertain an abject thought, nor too eagerly covet anything.", "Ench. 21"]]],
+      ["Do each task as if it were your last.", "Approach the next action without vanity, hypocrisy, or resentment, as though nothing comes after it.", [["Go about every action as thy last action, free from all vanity.", "Med. II.2"]]],
+      ["Remember the feuds that ended in ashes.", "When a grudge takes hold, think of all the people who hated and fought before you and are now long dead. Then let it go.", [["How many already, who once likewise prosecuted their enmities… are now long ago stretched out, and reduced unto ashes? It is time for thee to make an end.", "Med. IV.3"]]],
+      ["Watch everything flow.", "Remind yourself that all things, including your troubles, are in constant change like a river. Ask what in that flood is worth clutching.", [["In such a flux and course of all things, what of these things that hasten so fast away should any man regard?", "Med. VI.14"]]],
+      ["Play the part you were given, and play it well.", "You don’t pick your role, its length, or its circumstances. Your job is to perform it well.", [["This is your business—to act well the given part, but to choose it belongs to another.", "Ench. 17"]]],
+      ["Keep your hold on life loose.", "Enjoy what’s in front of you, like a sailor picking up shells on shore, but stay ready to return to the ship when called.", [["If the captain calls, run to the ship, leave all these things, and never look behind.", "Ench. 7"]]],
+      ["Accept the exit as you accepted the entrance.", "The same nature that brought you into the world will dismiss you from it. Treat that as the ordinary end of a play.", [["Why then should it be grievous unto thee, if… the same nature that brought thee in, doth now send thee out of the world?", "Med. XII.27"]]],
+      ["Read omens as opportunities.", "When something seems to portend bad luck, tell yourself that whatever happens, you can make good use of it.", [["Whatsoever happens, it belongs to me to derive advantage therefrom.", "Ench. 18"]]]
+    ]},
+    { id: "w", name: "Work, duty, and character", short: "Work & character", items: [
+      ["Use two quick tests before acting and speaking.", "If it isn’t right, don’t do it. If it isn’t true, don’t say it.", [["If it be not fitting, do it not. If it be not true, speak it not.", "Med. XII.13"]]],
+      ["Count the full cost before you commit.", "Before starting anything big, think through what comes before it and after it: the training, the setbacks, the chance of failing anyway. Then decide.", [["In every affair consider what precedes and what follows, and then undertake it.", "Ench. 29"]]],
+      ["Don’t take on a role beyond your strength.", "Overreaching costs you twice: you fail at the new role and abandon one you could have filled well.", [["", "Ench. 37"]]],
+      ["Define your character, then keep it.", "Decide how you want to carry yourself and hold to it both alone and in company.", [["Begin by prescribing to yourself some character and demeanor, such as you may preserve both alone and in company.", "Ench. 33"]]],
+      ["Speak less, and don’t gossip.", "Say what’s needed in few words. Steer conversation away from praising, blaming, or comparing people. Don’t keep retelling your own exploits.", [["Be mostly silent, or speak merely what is needful, and in few words.", "Ench. 33"]]],
+      ["Show your principles; don’t preach them.", "At dinner, don’t lecture on how to eat; just eat well. Let your conduct carry the argument.", [["Sheep do not hastily throw up the grass to show the shepherds how much they have eaten, but… produce it outwardly in wool and milk.", "Ench. 46"]]],
+      ["Do the right thing in plain sight.", "If you’ve decided an action is right, don’t hide it because people may misread it.", [["If you are not acting rightly, shun the action itself; if you are, why fear those who wrongly censure you?", "Ench. 35"]]],
+      ["Accept looking foolish while you improve.", "Expect some ridicule when you try to change. Stay steady without becoming smug, and don’t perform for others’ approval.", [["If you would improve, be content to be thought foolish and dull with regard to externals.", "Ench. 13"]]],
+      ["Don’t waste time wondering about other people.", "Unless it serves some common good, stop speculating about what others are doing, saying, or plotting.", [["Spend not the remnant of thy days in thoughts and fancies concerning other men.", "Med. III.4"]]],
+      ["Before a hard meeting, ask how a model person would act.", "Picture how someone you admire would handle it. Also picture being turned away or ignored, and go anyway if it’s your duty.", [["Represent to yourself how Socrates or Zeno would behave in such a case.", "Ench. 33"]]],
+      ["Practice hardship privately.", "If you train yourself in self-denial, do it quietly and for your own sake. Rinse your mouth when thirsty and tell no one.", [["Just rinse your mouth with water, and tell nobody.", "Ench. 47"]]]
+    ]},
+    { id: "t", name: "Ongoing training: making it stick", short: "Ongoing training", items: [
+      ["Start now, not someday.", "Stop postponing the person you mean to become. Treat the next temptation or setback as the contest itself.", [["Remember that now is the combat, now the Olympiad comes on, nor can it be put off.", "Ench. 50"]]],
+      ["Treat your rules as laws.", "Once you’ve adopted a principle, keep it as if breaking it would be a serious wrong, whatever anyone says about you.", [["Whatever rules you have adopted, abide by them as laws.", "Ench. 50"]]],
+      ["Prioritize practice over theory.", "Knowing <em>why</em> lying is wrong matters far less than not lying. Spend most of your effort on doing.", [["Therefore, at the same time that we lie, we are very ready to show how it is demonstrated that lying is wrong.", "Ench. 51"]]],
+      ["Keep a few short maxims ready.", "Choose a handful of brief principles you can recall instantly when things go wrong. (The lines at the top of each Problems entry are a starting set.)", [["Let these precepts be brief and fundamental, which as soon as thou dost call them to mind, may suffice thee.", "Med. IV.3"]]],
+      ["Check your thoughts against four warning signs.", "When you notice one, correct it on the spot by naming it: “This thought isn’t necessary.” “This one is uncharitable.” “This isn’t really me speaking.” “I’m letting my appetites run my mind.”", [["", "Med. XI.17"]]],
+      ["Track your progress by whom you blame.", "The beginner blames others; the learner blames himself; the person who has arrived blames no one. Notice which one you just did.", [["It is the action of an uninstructed person to reproach others for his own misfortunes; of one entering upon instruction, to reproach himself; and one perfectly instructed, to reproach neither others nor himself.", "Ench. 5"]]],
+      ["Use the signs of a person who is making progress.", "Look to yourself for help and harm. Smile quietly at praise. Don’t defend yourself against criticism. Watch yourself like someone recovering from an illness.", [["He keeps watch over himself as over an enemy and one in ambush.", "Ench. 48"]]],
+      ["Clear your head, deliberately.", "When idle fears or fantasies pile up, tell yourself that it’s in your power to keep them out, and set them aside.", [["Wipe off all idle fancies, and say unto thyself incessantly; Now if I will, it is in my power to keep out of this my soul all wickedness…", "Med. VIII.27"]]]
+    ]}
+  ];
+
+  /* Problems: the quick-reference card rows (with their "tell yourself" line), plus a few more
+     situations drawn from the same sections. Each points at practices by section id + number. */
+  var PROBLEM_GROUPS = [
+    { name: "Your own reactions", items: [
+      ["upset", "Something upsets you", "Is this up to me? If not, it’s nothing to me.", "Ench. 1", ["u1", "u3", "u11"]],
+      ["reaction", "A first reaction flares", "You’re an impression, not the thing itself.", "Ench. 1", ["u2", "u4", "u5"]],
+      ["wronged", "You feel wronged", "It’s my view of this that hurts, not the thing.", "Ench. 5", ["u3", "p1", "p7"]],
+      ["blocked", "A plan is blocked", "I wanted this <em>if nothing prevented it</em>. Now practice patience.", "Med. VI.45", ["m4", "u6", "u7"]],
+      ["small", "Something small goes wrong", "This is the price of peace of mind.", "Ench. 12", ["d5", "u8", "u12"]],
+      ["overwhelm", "Life feels overwhelming", "Play the part well; I didn’t choose it.", "Ench. 17", ["z5", "u11", "z4"]],
+      ["spiraling", "Your thoughts are spiraling", "", "", ["t8", "t5", "u11"]]
+    ]},
+    { name: "Other people", items: [
+      ["insulted", "Someone insults or criticizes you", "It seemed right to him.", "Ench. 42", ["p1", "p3", "p4"]],
+      ["angry", "Someone is angry at you", "", "", ["p10", "u4", "p1"]],
+      ["family", "Family lets you down", "Grab the handle that can be carried.", "Ench. 43", ["p2", "p9"]],
+      ["revenge", "You want revenge", "Don’t become like them.", "Med. VI.5", ["p6", "z3"]],
+      ["grudge", "You can’t let go of a grudge", "", "", ["z3", "p6", "p1"]],
+      ["ungrateful", "People are ungrateful or dishonest", "", "", ["p7", "p8", "m2"]],
+      ["envy", "You envy someone or compare yourself", "", "", ["d7", "p12"]],
+      ["grieving", "Someone close to you is grieving", "", "", ["p11"]],
+      ["judged", "You’re worried what people will think", "", "", ["w7", "w8", "p4"]]
+    ]},
+    { name: "Body, desire, and loss", items: [
+      ["pain", "You’re in pain", "Not unbearable, and not forever.", "Med. VII.35", ["u10", "u9", "u5"]],
+      ["ill", "You’re ill", "", "", ["u9", "u10"]],
+      ["tempted", "You’re tempted", "Wait. Picture the pleasure, the regret, and the win.", "Ench. 34", ["d6", "d8", "d9", "d3"]],
+      ["taken", "Something is taken from you", "It’s been returned, not lost.", "Ench. 11", ["d2", "d4", "d10", "d1"]]
+    ]},
+    { name: "Work and action", items: [
+      ["bed", "You can’t get out of bed", "I’m up to do a person’s work.", "Med. V.1", ["m1", "t1"]],
+      ["putoff", "You keep putting it off", "Now is the contest.", "Ench. 50", ["t1", "t2"]],
+      ["speak", "You’re about to act or speak", "Not right? Don’t do it. Not true? Don’t say it.", "Med. XII.13", ["w1", "w5", "u4"]],
+      ["commit", "You’re weighing a big commitment", "", "", ["w2", "w3"]],
+      ["meeting", "You’re dreading a hard meeting", "", "", ["w10", "m2", "m3"]]
+    ]}
+  ];
+
+  /* ---------- Index ---------- */
+  var BY_ID = {};
+  SECTIONS.forEach(function (s) {
+    s.items.forEach(function (it, i) {
+      BY_ID[s.id + (i + 1)] = { section: s, n: i + 1, title: it[0], body: it[1], sources: it[2] };
+    });
+  });
+  var PROBLEMS = {};
+  PROBLEM_GROUPS.forEach(function (g) {
+    g.items.forEach(function (p) { PROBLEMS[p[0]] = { slug: p[0], label: p[1], tell: p[2], cite: p[3], ids: p[4] }; });
+  });
+
+  // Morning draws from the Morning section; evening reflection draws from Perspective + Ongoing training.
+  var MORNING_POOL = ["m1", "m2", "m3", "m4", "m5"];
+  var EVENING_POOL = ["z1","z2","z3","z4","z5","z6","z7","z8","t1","t2","t3","t4","t5","t6","t7","t8"];
+
+  /* ---------- Date helpers ---------- */
+  function dayNumber(d) { return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
+  function isMorning(d) { return d.getHours() < 12; }
+  // Step through each pool with a stride coprime to its length so every item comes up before any repeats.
+  function dailyIndex(len, stride) { return (dayNumber(new Date()) * stride) % len; }
+  var MORNING_BASE = function () { return dailyIndex(MORNING_POOL.length, 3); };
+  var EVENING_BASE = function () { return dailyIndex(EVENING_POOL.length, 7); };
+
+  var state = { morningOff: 0, eveningOff: 0, problemOff: 0, problemSlug: null, day: dayNumber(new Date()), search: "" };
+
+  /* ---------- Rendering ---------- */
+  var app = document.getElementById("app");
+
+  function fullCite(c) {
+    if (c.indexOf("Ench.") === 0) return "Epictetus · Enchiridion " + c.slice(5).trim();
+    if (c.indexOf("Med.") === 0) return "Marcus Aurelius · Meditations " + c.slice(4).trim();
+    return c;
+  }
+
+  function practiceHTML(id, opts) {
+    var p = BY_ID[id];
+    opts = opts || {};
+    var sources = p.sources.map(function (s) {
+      return '<p class="source">' + (s[0] ? "<q>" + s[0] + "</q>" : "") +
+        "<cite>" + (s[0] ? "" : "See ") + fullCite(s[1]) + "</cite></p>";
+    }).join("");
+    return '<article class="practice fade">' +
+      '<p class="eyebrow cat">' + p.section.short + " · " + p.n + "</p>" +
+      "<h2>" + p.title + "</h2>" +
+      '<p class="body">' + p.body + "</p>" +
+      sources +
+      (opts.prompt ? '<p class="prompt"><b>' + opts.prompt[0] + "</b>" + opts.prompt[1] + "</p>" : "") +
+      "</article>";
+  }
+
+  function dateLabel(d) {
+    return d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+  }
+
+  var MORNING_PROMPT = ["Before you start", "Name one moment today where you’ll use this."];
+  var EVENING_PROMPT = ["Looking back", "Where did today call for this? What did you do, and what would you do next time?"];
+
+  function dailyView(kind, fromToday) {
+    var pool = kind === "morning" ? MORNING_POOL : EVENING_POOL;
+    var base = kind === "morning" ? MORNING_BASE() : EVENING_BASE();
+    var off = kind === "morning" ? state.morningOff : state.eveningOff;
+    var id = pool[(base + off) % pool.length];
+    var now = new Date();
+    var heading = kind === "morning" ? "Morning preparation" : "Evening reflection";
+    var tag = off === 0 ? (kind === "morning" ? "Today’s preparation" : "Tonight’s reflection")
+                        : "Extra " + off + " of " + (pool.length - 1);
+    var other = kind === "morning" ? ["evening", "See tonight’s reflection"] : ["morning", "See this morning’s preparation"];
+
+    var html = '<header class="view-head">' +
+      '<p class="eyebrow">' + dateLabel(now) + " · " + tag + "</p>" +
+      '<h1 class="view-title">' + heading + "</h1></header>" +
+      practiceHTML(id, { prompt: kind === "morning" ? MORNING_PROMPT : EVENING_PROMPT }) +
+      '<div class="actions">' +
+        '<button type="button" id="another-' + kind + '" data-act="another" data-kind="' + kind + '">Show another</button>' +
+        (off !== 0 ? '<button type="button" class="link" data-act="reset" data-kind="' + kind + '">Back to today’s</button>' : "") +
+      "</div>";
+
+    if (fromToday) {
+      html += '<div class="actions"><a class="btn" href="#' + other[0] + '">' + other[1] + "</a></div>" +
+        '<section class="group" aria-labelledby="happening">' +
+          '<h3 class="eyebrow" id="happening">Something happening right now?</h3>' +
+          '<div class="chips">' +
+            ["upset", "insulted", "blocked", "tempted", "putoff", "overwhelm"].map(function (s) {
+              return '<button type="button" data-act="problem" data-slug="' + s + '">' + PROBLEMS[s].label + "</button>";
+            }).join("") +
+            '<a class="btn" href="#problems" style="font-size:14px;padding:8px 14px;min-height:40px;border-style:dashed">All problems</a>' +
+          "</div></section>";
+    }
+    return html;
+  }
+
+  function problemsView() {
+    var q = state.search.trim().toLowerCase();
+    var html = '<header class="view-head"><p class="eyebrow">Pick what’s happening</p>' +
+      '<h1 class="view-title">What are you facing?</h1></header>' +
+      '<label class="eyebrow" for="problem-search" style="margin-bottom:-14px">Search</label>' +
+      '<input type="search" id="problem-search" placeholder="e.g. anger, loss, procrastinating" value="' + escapeAttr(state.search) + '" autocomplete="off">';
+    var any = false;
+    PROBLEM_GROUPS.forEach(function (g) {
+      var items = g.items.filter(function (p) { return !q || matchesProblem(PROBLEMS[p[0]], q); });
+      if (!items.length) return;
+      any = true;
+      html += '<section class="group"><h3 class="eyebrow">' + g.name + '</h3><ul class="problem-list">' +
+        items.map(function (p) {
+          return '<li><button type="button" data-act="problem" data-slug="' + p[0] + '">' + p[1] + "</button></li>";
+        }).join("") + "</ul></section>";
+    });
+    if (!any) html += '<p class="lede">Nothing matches “' + escapeHTML(state.search) + '”. Try a simpler word, or browse everything under All.</p>';
+    return html;
+  }
+
+  function matchesProblem(p, q) {
+    var hay = (p.label + " " + p.tell + " " + p.ids.map(function (id) { var x = BY_ID[id]; return x.title + " " + x.body; }).join(" ")).toLowerCase();
+    return q.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1 || hay.indexOf(w.replace(/(ing|ed|s)$/, "")) !== -1; });
+  }
+
+  function problemView(slug) {
+    var p = PROBLEMS[slug];
+    if (!p) return problemsView();
+    var off = state.problemSlug === slug ? state.problemOff : 0;
+    var id = p.ids[off % p.ids.length];
+    var html = '<header class="view-head"><p class="eyebrow"><a href="#problems" style="color:inherit">‹ Problems</a></p>' +
+      '<h1 class="view-title">' + p.label + "</h1></header>";
+    if (p.tell) {
+      html += '<div><p class="eyebrow" style="margin-bottom:6px">Tell yourself</p><p class="maxim">“' + p.tell + '”</p>' +
+        '<p class="maxim-cite">' + fullCite(p.cite) + "</p></div>";
+    }
+    html += '<div class="view-head"><p class="eyebrow">' + (p.tell ? "Then do this" : "Try this") + "</p></div>" +
+      practiceHTML(id);
+    if (p.ids.length > 1) {
+      html += '<div class="actions"><button type="button" class="primary" data-act="next-practice" data-slug="' + slug + '">Another practice for this</button>' +
+        '<span class="counter">' + ((off % p.ids.length) + 1) + " of " + p.ids.length + "</span></div>";
+    }
+    return html;
+  }
+
+  function allView() {
+    var html = '<header class="view-head"><p class="eyebrow">Every practice</p>' +
+      '<h1 class="view-title">The whole list</h1></header>' +
+      '<p class="lede">Every practice rests on one sorting rule: separate what is up to you (your judgments, choices, desires, aversions) from what is not (your body, property, reputation, other people, events).</p>' +
+      '<p class="rule-quote"><q>There are things which are within our power, and there are things which are beyond our power.</q><br><cite class="maxim-cite" style="font-style:normal">Epictetus · Enchiridion 1</cite></p>' +
+      '<div>';
+    SECTIONS.forEach(function (s) {
+      html += '<details class="section" id="sec-' + s.id + '"><summary><span class="s-title">' + s.name + '</span><span class="s-count">' + s.items.length + " practices</span></summary>" +
+        '<div class="section-items">' + s.items.map(function (_, i) { return practiceHTML(s.id + (i + 1)); }).join("") + "</div></details>";
+    });
+    html += "</div><p class=\"lede\" style=\"font-size:14px\">Translations: Higginson (Enchiridion), Casaubon (Meditations). Casaubon’s section numbers don’t always match modern editions.</p>";
+    return html;
+  }
+
+  function escapeHTML(s) { return s.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var escapeAttr = escapeHTML;
+
+  /* ---------- Routing ---------- */
+  function currentRoute() {
+    var h = (location.hash || "").replace(/^#/, "");
+    if (!h) return { view: "today" };
+    if (h.indexOf("problem-") === 0) return { view: "problem", slug: h.slice(8) };
+    if (["today", "morning", "evening", "problems", "all"].indexOf(h) !== -1) return { view: h };
+    return { view: "today" };
+  }
+
+  function render(keepScroll) {
+    // New day: reset any "show another" offsets.
+    var today = dayNumber(new Date());
+    if (today !== state.day) { state.day = today; state.morningOff = 0; state.eveningOff = 0; }
+
+    var r = currentRoute();
+    var html;
+    switch (r.view) {
+      case "morning": html = dailyView("morning", false); break;
+      case "evening": html = dailyView("evening", false); break;
+      case "problems": html = problemsView(); break;
+      case "problem": html = problemView(r.slug); break;
+      case "all": html = allView(); break;
+      default: html = dailyView(isMorning(new Date()) ? "morning" : "evening", true);
+    }
+    app.innerHTML = html;
+
+    var tab = r.view === "problem" ? "problems" : r.view;
+    document.querySelectorAll("nav.tabs a").forEach(function (a) {
+      if (a.getAttribute("data-tab") === tab) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+    if (!keepScroll) window.scrollTo(0, 0);
+
+    var search = document.getElementById("problem-search");
+    if (search) {
+      search.addEventListener("input", function () {
+        state.search = search.value;
+        var pos = search.selectionStart;
+        render(true);
+        var s2 = document.getElementById("problem-search");
+        s2.focus();
+        try { s2.setSelectionRange(pos, pos); } catch (e) {}
+      });
+    }
+  }
+
+  app.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]");
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    if (act === "another") {
+      if (b.getAttribute("data-kind") === "morning") state.morningOff = (state.morningOff + 1) % MORNING_POOL.length;
+      else state.eveningOff = (state.eveningOff + 1) % EVENING_POOL.length;
+      render(true);
+    } else if (act === "reset") {
+      if (b.getAttribute("data-kind") === "morning") state.morningOff = 0; else state.eveningOff = 0;
+      render(true);
+    } else if (act === "problem") {
+      var slug = b.getAttribute("data-slug");
+      state.problemSlug = slug; state.problemOff = 0;
+      location.hash = "problem-" + slug;
+    } else if (act === "next-practice") {
+      state.problemSlug = b.getAttribute("data-slug");
+      state.problemOff += 1;
+      render(true);
+    }
+  });
+
+  window.addEventListener("hashchange", function () { render(false); });
+  // When the app is brought back from the background (it may now be after noon, or a new day), refresh.
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") render(true);
+  });
+
+  render(false);
+
+  // Offline support when hosted as a standalone site (ignored where service workers aren't available).
+  if ("serviceWorker" in navigator && location.protocol === "https:" && !/claude\.ai|claudeusercontent/.test(location.hostname)) {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>
